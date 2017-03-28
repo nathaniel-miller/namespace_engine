@@ -6,8 +6,8 @@ require 'rails_namespace_engine/version'
 Gem::Specification.new do |spec|
   spec.name          = "rails_namespace_engine"
   spec.version       = RailsNamespaceEngine::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["dukeoflaser@gmail.com"]
+  spec.authors       = ["Nathaniel Miller"]
+  spec.email         = ["nathaniel@m.ller.io"]
 
   spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rails", "~> 3.0"
 end
