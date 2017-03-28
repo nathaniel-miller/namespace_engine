@@ -2,4 +2,4 @@
 
 require_relative '../lib/rails_namespace_engine.rb'
 
-RailsNamespaceEngine::CLI.new.call(ARGV)
+RailsNamespaceEngine::CLI.new(ARGV).call
