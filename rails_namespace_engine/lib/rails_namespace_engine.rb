@@ -35,12 +35,10 @@ class RailsNamespaceEngine::CLI
 
   def generate
     puts "#{namespace} and #{engine_name}"
-    # create_engines_dir
-    puts Dir.pwd
+    create_engines_dir
   end
 
   def create_engines_dir
-    # FileUtils.mkdir '~/engines'
-
+    FileUtils.mkdir './engines' unless Dir.exists?('./engines')
   end
 end
