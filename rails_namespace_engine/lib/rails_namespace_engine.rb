@@ -1,8 +1,11 @@
 require 'fileutils'
+require 'rails/generators'
+# require "rails/generators/rails/app/app_generator"
 require_relative "rails_namespace_engine/version"
 
+class NamespaceEngine
+  # include Rails::Generators::Base
 
-class RailsNamespaceEngine::CLI
   attr_reader :help, :namespace, :engine_name
 
   def initialize(argv)
@@ -20,9 +23,6 @@ class RailsNamespaceEngine::CLI
   def call
     if help
       puts instructions
-    elsif invalid?
-      puts error_message
-      puts instructions
     else
       create_directories
     end
@@ -30,7 +30,7 @@ class RailsNamespaceEngine::CLI
 
   def instructions
     insts = <<-INSTS
-    
+
       These are the instructions.
     INSTS
 
@@ -53,5 +53,6 @@ class RailsNamespaceEngine::CLI
 
   def create_directories
     FileUtils.mkdir './engines' unless Dir.exists?('./engines')
+    Rails::Generators.invoke('plugin', [@engine_name])
   end
 end
