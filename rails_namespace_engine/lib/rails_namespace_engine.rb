@@ -20,25 +20,38 @@ class RailsNamespaceEngine::CLI
   def call
     if help
       puts instructions
+    elsif invalid?
+      puts error_message
+      puts instructions
     else
-      generate
+      create_directories
     end
   end
 
   def instructions
     insts = <<-INSTS
+    
       These are the instructions.
     INSTS
 
     insts
   end
 
-  def generate
-    puts "#{namespace} and #{engine_name}"
-    create_engines_dir
+  def error_message
+    error = <<-ERR
+
+      There is no engine with the name of #{engine_name}.
+    ERR
   end
 
-  def create_engines_dir
+  def invalid?
+    invalid = false
+    invalid = true unless Dir.exists?("./#{engine_name}")
+
+    invalid
+  end
+
+  def create_directories
     FileUtils.mkdir './engines' unless Dir.exists?('./engines')
   end
 end
