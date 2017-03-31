@@ -37,24 +37,11 @@ class NamespaceEngine
     insts
   end
 
-  def error_message
-    error = <<-ERR
-
-      There is no engine with the name of #{engine_name}.
-    ERR
-  end
-
-  def invalid?
-    invalid = false
-    invalid = true unless Dir.exists?("./#{engine_name}")
-
-    invalid
-  end
-
   def create_directories
     Rails::Generators.invoke('plugin', [engine_name])
     FileUtils.cd('../../../')
     FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
     FileUtils.mv "#{engine_name}", './engines', verbose: true
+    FileUtils.mkdir "./lib/#{namespace}", verbose: true
   end
 end
