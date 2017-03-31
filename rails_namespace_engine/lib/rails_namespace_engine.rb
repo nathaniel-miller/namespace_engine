@@ -49,5 +49,7 @@ class NamespaceEngine
     FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}.rb",
       "./engines/#{engine_name}/lib/#{namespace}",
       verbose: true
+    FileUtils.touch "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb",
+      verbose: true
   end
 end
