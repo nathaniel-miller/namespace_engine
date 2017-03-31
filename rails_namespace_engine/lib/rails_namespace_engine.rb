@@ -51,5 +51,8 @@ class NamespaceEngine
       verbose: true
     FileUtils.touch "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb",
       verbose: true
+    FileUtils.mv "./engines/#{engine_name}/#{engine_name}.gemspec",
+      "./engines/#{engine_name}/#{namespace}_#{engine_name}.gemspec",
+      verbose: true 
   end
 end
