@@ -1,3 +1,0 @@
-module Paul
-  # Your code goes here...
-end

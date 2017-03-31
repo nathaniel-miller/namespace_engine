@@ -52,7 +52,9 @@ class NamespaceEngine
   end
 
   def create_directories
-    FileUtils.mkdir './engines' unless Dir.exists?('./engines')
-    Rails::Generators.invoke('plugin', [@engine_name])
+    Rails::Generators.invoke('plugin', [engine_name])
+    FileUtils.cd('../../../')
+    FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
+    FileUtils.mv "#{engine_name}", './engines', verbose: true
   end
 end
