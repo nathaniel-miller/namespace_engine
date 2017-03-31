@@ -15,8 +15,8 @@ class NamespaceEngine
       @help = true
     else
       @help = false
-      @namespace = argv[0]
-      @engine_name = argv[1]
+      @namespace = argv[0].underscore
+      @engine_name = argv[1].underscore
     end
   end
 
@@ -43,5 +43,11 @@ class NamespaceEngine
     FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
     FileUtils.mv "#{engine_name}", './engines', verbose: true
     FileUtils.mkdir "./engines/#{engine_name}/lib/#{namespace}", verbose: true
+    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}",
+      "./engines/#{engine_name}/lib/#{namespace}",
+      verbose: true
+    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}.rb",
+      "./engines/#{engine_name}/lib/#{namespace}",
+      verbose: true
   end
 end
