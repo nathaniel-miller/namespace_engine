@@ -42,6 +42,6 @@ class NamespaceEngine
     FileUtils.cd('../../../')
     FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
     FileUtils.mv "#{engine_name}", './engines', verbose: true
-    FileUtils.mkdir "./lib/#{namespace}", verbose: true
+    FileUtils.mkdir "./engines/#{engine_name}/lib/#{namespace}", verbose: true
   end
 end
