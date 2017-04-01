@@ -22,9 +22,8 @@ class NamespaceEngine
     if help
       puts instructions
     else
-      create_directories
-      create_files
-      move_files
+      invoke_generator
+      structure_files_and_directories
       alter_files
     end
   end
@@ -38,14 +37,21 @@ class NamespaceEngine
     insts
   end
 
-  def create_directories
+  def invoke_generator
     Rails::Generators.invoke('plugin', [engine_name])
     FileUtils.cd('../../../')
-    FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
-    FileUtils.mkdir "./engines/#{engine_name}/lib/#{namespace}", verbose: true
   end
 
-  def create_files
+  def structure_files_and_directories
+    FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
+    FileUtils.mv "#{engine_name}", './engines', verbose: true
+    FileUtils.mkdir "./engines/#{engine_name}/lib/#{namespace}", verbose: true
+    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}",
+      "./engines/#{engine_name}/lib/#{namespace}",
+      verbose: true
+    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}.rb",
+      "./engines/#{engine_name}/lib/#{namespace}",
+      verbose: true
     FileUtils.touch "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb",
       verbose: true
     FileUtils.mv "./engines/#{engine_name}/#{engine_name}.gemspec",
@@ -53,17 +59,17 @@ class NamespaceEngine
       verbose: true
   end
 
-  def move_files
-    FileUtils.mv "#{engine_name}", './engines', verbose: true
-    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}",
-      "./engines/#{engine_name}/lib/#{namespace}",
-      verbose: true
-    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}.rb",
-      "./engines/#{engine_name}/lib/#{namespace}",
-      verbose: true
+  def alter_files
+    file = "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb"
+    requirements = <<-EOF.strip_heredoc
+      require "#{namespace}/#{engine_name}/engine"
+      require "#{namespace}/#{engine_name}"
+    EOF
+
+    File.open(file, 'w') do |f|
+      f.write requirements
+    end
+
   end
 
-  def alter_files
-    # Add needed code to files
-  end
 end
