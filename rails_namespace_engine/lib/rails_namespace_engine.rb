@@ -100,6 +100,13 @@ class NamespaceEngine
       end
     EOF
 
+    files[4] = {}
+    files[4][:file] = "./engines/#{engine_name}/config/routes.rb"
+    files[4][:contents] = <<-EOF.strip_heredoc
+      #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do  
+      end
+    EOF
+
     write_to(files)
 
   end
