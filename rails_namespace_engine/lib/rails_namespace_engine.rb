@@ -24,7 +24,7 @@ class NamespaceEngine
     else
       invoke_generator
       structure_files_and_directories
-      alter_files
+      file_contents
     end
   end
 
@@ -59,17 +59,35 @@ class NamespaceEngine
       verbose: true
   end
 
-  def alter_files
-    file = "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb"
-    requirements = <<-EOF.strip_heredoc
+  def file_contents
+    files = []
+    files[0] = {}
+    files[0][:file] = "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb"
+    files[0][:contents] = <<-EOF.strip_heredoc
       require "#{namespace}/#{engine_name}/engine"
       require "#{namespace}/#{engine_name}"
     EOF
 
-    File.open(file, 'w') do |f|
-      f.write requirements
-    end
+    files[1] = {}
+    files[1][:file] = "./engines/#{engine_name}/lib/#{namespace}/#{engine_name}.rb"
+    files[1][:contents] = <<-EOF.strip_heredoc
+      module #{namespace.camelize}
+        module #{engine_name.camelize}
+          # Your code goes here...
+        end
+      end
+    EOF
 
+    write_to(files)
+
+  end
+
+  def write_to(files)
+    files.each do |f|
+      File.open(f[:file], 'w') do |file|
+        file.write f[:contents]
+      end
+    end
   end
 
 end
