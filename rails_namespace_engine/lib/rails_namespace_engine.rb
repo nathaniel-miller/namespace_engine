@@ -38,7 +38,7 @@ class NamespaceEngine
   end
 
   def invoke_generator
-    Rails::Generators.invoke('plugin', [engine_name])
+    Rails::Generators.invoke('plugin', [engine_name, '--mountable'])
     FileUtils.cd('../../../')
   end
 
