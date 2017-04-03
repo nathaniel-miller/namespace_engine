@@ -88,6 +88,18 @@ class NamespaceEngine
       end
     EOF
 
+    files[3] = {}
+    files[3][:file] = "./engines/#{engine_name}/lib/#{namespace}/#{engine_name}/engine.rb"
+    files[3][:contents] = <<-EOF.strip_heredoc
+      module #{namespace.camelize}
+        module #{engine_name.camelize}
+          class Engine < ::Rails::Engine
+            isolate_namespace #{namespace.camelize}
+          end
+        end
+      end
+    EOF
+
     write_to(files)
 
   end
