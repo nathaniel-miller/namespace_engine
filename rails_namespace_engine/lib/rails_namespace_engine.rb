@@ -101,9 +101,16 @@ class NamespaceEngine
     EOF
 
     files[4] = {}
-    files[4][:file] = "./engines/#{engine_name}/config/routes.rb"
-    files[4][:contents] = <<-EOF.strip_heredoc
-      #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do  
+    files[4][:file] = "./engines/#{engine_name}/bin/rails"
+    contents = File.read(files[4][:file])
+    old_path = "../../lib/#{engine_name}"
+    updated_path = "../../lib/#{namespace}/#{engine_name}"
+    files[4][:contents] = contents.gsub(old_path, updated_path)
+
+    files[5] = {}
+    files[5][:file] = "./engines/#{engine_name}/config/routes.rb"
+    files[5][:contents] = <<-EOF.strip_heredoc
+      #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do
       end
     EOF
 
