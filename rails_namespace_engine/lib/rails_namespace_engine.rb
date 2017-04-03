@@ -78,6 +78,16 @@ class NamespaceEngine
       end
     EOF
 
+    files[2] = {}
+    files[2][:file] = "./engines/#{engine_name}/lib/#{namespace}/#{engine_name}/version.rb"
+    files[2][:contents] = <<-EOF.strip_heredoc
+      module #{namespace.camelize}
+        module #{engine_name.camelize}
+          VERSION = '0.1.0'
+        end
+      end
+    EOF
+
     write_to(files)
 
   end
