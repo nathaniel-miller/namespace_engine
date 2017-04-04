@@ -112,14 +112,10 @@ class NamespaceEngine
     patterns[2][:update] = %'#{namespace.camelize}::#{engine_name.camelize}::VERSION'
 
     patterns.each do |pattern|
-      contents.gsub(pattern[:original], pattern[:update])
+      files[4][:contents] = contents.gsub!(pattern[:original], pattern[:update])
     end
 
-    # files[4][:contents] = contents.gsub(old_require, updated_require)
-    # files[4][:contents] = contents.gsub(old_name, updated_name)
-    # files[4][:contents] = contents.gsub(old_version, updated_version)
-
-
+    # files[4][:contents] = updated_contents
 
     files[5] = {}
     files[5][:file] = "./engines/#{engine_name}/bin/rails"
