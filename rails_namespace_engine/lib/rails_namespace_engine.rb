@@ -115,8 +115,6 @@ class NamespaceEngine
       files[4][:contents] = contents.gsub!(pattern[:original], pattern[:update])
     end
 
-    # files[4][:contents] = updated_contents
-
     files[5] = {}
     files[5][:file] = "./engines/#{engine_name}/bin/rails"
     contents = File.read(files[5][:file])
@@ -130,6 +128,16 @@ class NamespaceEngine
       #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do
       end
     EOF
+
+    add_gem_to_gemfile = <<-GEM.strip_heredoc
+
+      #Add unpacked gem directly from file system
+      gem '#{namespace}_#{engine_name}', path: 'engines/#{engine_name}'
+    GEM
+
+    File.open('Gemfile', 'a') do |file|
+      file.write add_gem_to_gemfile
+    end
 
     write_to(files)
 
