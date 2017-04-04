@@ -139,6 +139,26 @@ class NamespaceEngine
       file.write add_gem_to_gemfile
     end
 
+
+
+    tempfile = File.open("config/routes.tmp", 'w')
+    f = File.new("config/routes.rb")
+
+    f.each do |line|
+      tempfile << line
+      if line =~ /Rails.application.routes.draw do/
+        tempfile << "  mount #{namespace.camelize}::#{engine_name.camelize}::Engine => '/#{engine_name}', as: '#{engine_name}' \n"
+      end
+    end
+
+    f.close
+    tempfile.close
+
+    FileUtils.mv("config/routes.tmp", "config/routes.rb")
+
+
+
+
     write_to(files)
 
   end
