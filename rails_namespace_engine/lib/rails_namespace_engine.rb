@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'rails/generators'
-# require "rails/generators/rails/app/app_generator"
 require_relative "rails_namespace_engine/version"
 
 class NamespaceEngine
@@ -101,15 +100,37 @@ class NamespaceEngine
     EOF
 
     files[4] = {}
-    files[4][:file] = "./engines/#{engine_name}/bin/rails"
+    files[4][:file] = "./engines/#{engine_name}/#{namespace}_#{engine_name}.gemspec"
     contents = File.read(files[4][:file])
-    old_path = "../../lib/#{engine_name}"
-    updated_path = "../../lib/#{namespace}/#{engine_name}"
-    files[4][:contents] = contents.gsub(old_path, updated_path)
+
+    patterns = [{},{},{}]
+    patterns[0][:original] = %Q'#{engine_name}/version'
+    patterns[0][:update] = %Q'#{namespace}/#{engine_name}/version'
+    patterns[1][:original] = %Q'= "#{engine_name}"'
+    patterns[1][:update] = %Q'= "#{namespace}_#{engine_name}"'
+    patterns[2][:original] = %'#{engine_name.camelize}::VERSION'
+    patterns[2][:update] = %'#{namespace.camelize}::#{engine_name.camelize}::VERSION'
+
+    patterns.each do |pattern|
+      contents.gsub(pattern[:original], pattern[:update])
+    end
+
+    # files[4][:contents] = contents.gsub(old_require, updated_require)
+    # files[4][:contents] = contents.gsub(old_name, updated_name)
+    # files[4][:contents] = contents.gsub(old_version, updated_version)
+
+
 
     files[5] = {}
-    files[5][:file] = "./engines/#{engine_name}/config/routes.rb"
-    files[5][:contents] = <<-EOF.strip_heredoc
+    files[5][:file] = "./engines/#{engine_name}/bin/rails"
+    contents = File.read(files[5][:file])
+    old_path = "../../lib/#{engine_name}"
+    updated_path = "../../lib/#{namespace}/#{engine_name}"
+    files[5][:contents] = contents.gsub(old_path, updated_path)
+
+    files[6] = {}
+    files[6][:file] = "./engines/#{engine_name}/config/routes.rb"
+    files[6][:contents] = <<-EOF.strip_heredoc
       #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do
       end
     EOF
