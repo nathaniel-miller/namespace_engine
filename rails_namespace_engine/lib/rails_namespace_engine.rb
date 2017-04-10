@@ -52,19 +52,19 @@ class NamespaceEngine
   end
 
   def structure_files_and_directories
+    root = "./engines/#{engine_name}"
+    path_one = "#{root}/lib/#{namespace}"
+    path_two = "#{root}/lib/#{engine_name}"
+
+
     FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
     FileUtils.mv "#{engine_name}", './engines', verbose: true
-    FileUtils.mkdir "./engines/#{engine_name}/lib/#{namespace}", verbose: true
-    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}",
-      "./engines/#{engine_name}/lib/#{namespace}",
-      verbose: true
-    FileUtils.mv "./engines/#{engine_name}/lib/#{engine_name}.rb",
-      "./engines/#{engine_name}/lib/#{namespace}",
-      verbose: true
-    FileUtils.touch "./engines/#{engine_name}/lib/#{namespace}_#{engine_name}.rb",
-      verbose: true
-    FileUtils.mv "./engines/#{engine_name}/#{engine_name}.gemspec",
-      "./engines/#{engine_name}/#{namespace}_#{engine_name}.gemspec",
+    FileUtils.mkdir path_one, verbose: true
+    FileUtils.mv path_two, path_one, verbose: true
+    FileUtils.mv "#{path_two}.rb", path_one, verbose: true
+    FileUtils.touch "#{path_one}_#{engine_name}.rb", verbose: true
+    FileUtils.mv "#{root}/#{engine_name}.gemspec",
+      "#{root}/#{namespace}_#{engine_name}.gemspec",
       verbose: true
   end
 
