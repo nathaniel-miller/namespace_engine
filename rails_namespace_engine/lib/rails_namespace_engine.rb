@@ -52,36 +52,33 @@ class NamespaceEngine
   end
 
   def structure_files_and_directories
-    root = "./engines/#{engine_name}"
-    path_one = "#{root}/lib/#{namespace}"
-    path_two = "#{root}/lib/#{engine_name}"
+    @root = "./engines/#{engine_name}"
+    @path_one = "#{@root}/lib/#{namespace}"
+    @path_two = "#{@root}/lib/#{engine_name}"
 
 
     FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
     FileUtils.mv "#{engine_name}", './engines', verbose: true
-    FileUtils.mkdir path_one, verbose: true
-    FileUtils.mv path_two, path_one, verbose: true
-    FileUtils.mv "#{path_two}.rb", path_one, verbose: true
-    FileUtils.touch "#{path_one}_#{engine_name}.rb", verbose: true
-    FileUtils.mv "#{root}/#{engine_name}.gemspec",
-      "#{root}/#{namespace}_#{engine_name}.gemspec",
+    FileUtils.mkdir @path_one, verbose: true
+    FileUtils.mv @path_two, @path_one, verbose: true
+    FileUtils.mv "#{@path_two}.rb", @path_one, verbose: true
+    FileUtils.touch "#{@path_one}_#{engine_name}.rb", verbose: true
+    FileUtils.mv "#{@root}/#{engine_name}.gemspec",
+      "#{@root}/#{namespace}_#{engine_name}.gemspec",
       verbose: true
   end
 
   def file_contents
-    root = "./engines/#{engine_name}"
-    namespace_path = "#{root}/lib/#{namespace}"
+    files = [{}, {}, {}, {}, {}, {}, {}]
 
-    files = []
-    files[0] = {}
-    files[0][:file] = "#{namespace_path}_#{engine_name}.rb"
+    files[0][:file] = "#{@path_one}_#{engine_name}.rb"
     files[0][:contents] = <<-EOF.strip_heredoc
       require "#{namespace}/#{engine_name}/engine"
       require "#{namespace}/#{engine_name}"
     EOF
 
-    files[1] = {}
-    files[1][:file] = "#{namespace_path}/#{engine_name}.rb"
+
+    files[1][:file] = "#{@path_one}/#{engine_name}.rb"
     files[1][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
@@ -90,8 +87,8 @@ class NamespaceEngine
       end
     EOF
 
-    files[2] = {}
-    files[2][:file] = "#{namespace_path}/#{engine_name}/version.rb"
+
+    files[2][:file] = "#{@path_one}/#{engine_name}/version.rb"
     files[2][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
@@ -100,8 +97,8 @@ class NamespaceEngine
       end
     EOF
 
-    files[3] = {}
-    files[3][:file] = "#{namespace_path}/#{engine_name}/engine.rb"
+
+    files[3][:file] = "#{@path_one}/#{engine_name}/engine.rb"
     files[3][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
@@ -112,8 +109,8 @@ class NamespaceEngine
       end
     EOF
 
-    files[4] = {}
-    files[4][:file] = "#{root}/#{namespace}_#{engine_name}.gemspec"
+
+    files[4][:file] = "#{@root}/#{namespace}_#{engine_name}.gemspec"
     contents = File.read(files[4][:file])
 
     patterns = [{},{},{}]
@@ -128,19 +125,20 @@ class NamespaceEngine
       files[4][:contents] = contents.gsub!(pattern[:original], pattern[:update])
     end
 
-    files[5] = {}
-    files[5][:file] = "#{root}/bin/rails"
+
+    files[5][:file] = "#{@root}/bin/rails"
     contents = File.read(files[5][:file])
     old_path = "../../lib/#{engine_name}"
     updated_path = "../../lib/#{namespace}/#{engine_name}"
     files[5][:contents] = contents.gsub(old_path, updated_path)
 
-    files[6] = {}
-    files[6][:file] = "#{root}/config/routes.rb"
+
+    files[6][:file] = "#{@root}/config/routes.rb"
     files[6][:contents] = <<-EOF.strip_heredoc
       #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do
       end
     EOF
+
 
     add_gem_to_gemfile = <<-GEM.strip_heredoc
 
@@ -168,10 +166,6 @@ class NamespaceEngine
     tempfile.close
 
     FileUtils.mv("config/routes.tmp", "config/routes.rb")
-
-
-
-
     write_to(files)
 
   end
