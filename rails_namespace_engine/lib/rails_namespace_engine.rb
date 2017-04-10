@@ -27,6 +27,8 @@ class NamespaceEngine
     end
   end
 
+  private
+
   def instructions
     insts = <<-INSTS
       Simply provide two arguments.
@@ -69,37 +71,55 @@ class NamespaceEngine
   end
 
   def file_contents
-    files = [{}, {}, {}, {}, {}, {}, {}]
+    @files = []
+    7.times { @files << Hash.new }
 
-    files[0][:file] = "#{@path_one}_#{engine_name}.rb"
-    files[0][:contents] = <<-EOF.strip_heredoc
+    file_0
+    file_1
+    file_2
+    file_3
+    file_4
+    file_5
+    file_6
+
+    add_gem_to_gemfile
+    config_routes
+    write_to(@files)
+  end
+
+  def file_0
+    @files[0][:file] = "#{@path_one}_#{engine_name}.rb"
+    @files[0][:contents] = <<-EOF.strip_heredoc
       require "#{namespace}/#{engine_name}/engine"
       require "#{namespace}/#{engine_name}"
     EOF
+  end
 
-
-    files[1][:file] = "#{@path_one}/#{engine_name}.rb"
-    files[1][:contents] = <<-EOF.strip_heredoc
+  def file_1
+    @files[1][:file] = "#{@path_one}/#{engine_name}.rb"
+    @files[1][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
           # Your code goes here...
         end
       end
     EOF
+  end
 
-
-    files[2][:file] = "#{@path_one}/#{engine_name}/version.rb"
-    files[2][:contents] = <<-EOF.strip_heredoc
+  def file_2
+    @files[2][:file] = "#{@path_one}/#{engine_name}/version.rb"
+    @files[2][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
           VERSION = '0.1.0'
         end
       end
     EOF
+  end
 
-
-    files[3][:file] = "#{@path_one}/#{engine_name}/engine.rb"
-    files[3][:contents] = <<-EOF.strip_heredoc
+  def file_3
+    @files[3][:file] = "#{@path_one}/#{engine_name}/engine.rb"
+    @files[3][:contents] = <<-EOF.strip_heredoc
       module #{namespace.camelize}
         module #{engine_name.camelize}
           class Engine < ::Rails::Engine
@@ -108,10 +128,11 @@ class NamespaceEngine
         end
       end
     EOF
+  end
 
-
-    files[4][:file] = "#{@root}/#{namespace}_#{engine_name}.gemspec"
-    contents = File.read(files[4][:file])
+  def file_4
+    @files[4][:file] = "#{@root}/#{namespace}_#{engine_name}.gemspec"
+    contents = File.read(@files[4][:file])
 
     patterns = [{},{},{}]
     patterns[0][:original] = %Q'#{engine_name}/version'
@@ -122,24 +143,27 @@ class NamespaceEngine
     patterns[2][:update] = %'#{namespace.camelize}::#{engine_name.camelize}::VERSION'
 
     patterns.each do |pattern|
-      files[4][:contents] = contents.gsub!(pattern[:original], pattern[:update])
+      @files[4][:contents] = contents.gsub!(pattern[:original], pattern[:update])
     end
+  end
 
-
-    files[5][:file] = "#{@root}/bin/rails"
-    contents = File.read(files[5][:file])
+  def file_5
+    @files[5][:file] = "#{@root}/bin/rails"
+    contents = File.read(@files[5][:file])
     old_path = "../../lib/#{engine_name}"
     updated_path = "../../lib/#{namespace}/#{engine_name}"
-    files[5][:contents] = contents.gsub(old_path, updated_path)
+    @files[5][:contents] = contents.gsub(old_path, updated_path)
+  end
 
-
-    files[6][:file] = "#{@root}/config/routes.rb"
-    files[6][:contents] = <<-EOF.strip_heredoc
+  def file_6
+    @files[6][:file] = "#{@root}/config/routes.rb"
+    @files[6][:contents] = <<-EOF.strip_heredoc
       #{namespace.camelize}::#{engine_name.camelize}::Engine.routes.draw do
       end
     EOF
+  end
 
-
+  def add_gem_to_gemfile
     add_gem_to_gemfile = <<-GEM.strip_heredoc
 
       #Add unpacked gem directly from file system
@@ -149,9 +173,9 @@ class NamespaceEngine
     File.open('Gemfile', 'a') do |file|
       file.write add_gem_to_gemfile
     end
+  end
 
-
-
+  def config_routes
     tempfile = File.open("config/routes.tmp", 'w')
     f = File.new("config/routes.rb")
 
@@ -166,8 +190,6 @@ class NamespaceEngine
     tempfile.close
 
     FileUtils.mv("config/routes.tmp", "config/routes.rb")
-    write_to(files)
-
   end
 
   def write_to(files)
