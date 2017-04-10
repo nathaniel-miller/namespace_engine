@@ -29,8 +29,8 @@ class NamespaceEngine
 
   def instructions
     insts = <<-INSTS
+      Here are some test instructions!
 
-      These are the instructions.
     INSTS
 
     insts
