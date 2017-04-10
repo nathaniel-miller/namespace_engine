@@ -59,15 +59,14 @@ class NamespaceEngine
     @path_two = "#{@root}/lib/#{engine_name}"
 
 
-    FileUtils.mkdir './engines', verbose: true unless Dir.exists?('./engines')
-    FileUtils.mv "#{engine_name}", './engines', verbose: true
-    FileUtils.mkdir @path_one, verbose: true
-    FileUtils.mv @path_two, @path_one, verbose: true
-    FileUtils.mv "#{@path_two}.rb", @path_one, verbose: true
-    FileUtils.touch "#{@path_one}_#{engine_name}.rb", verbose: true
+    FileUtils.mkdir './engines' unless Dir.exists?('./engines')
+    FileUtils.mv "#{engine_name}", './engines'
+    FileUtils.mkdir @path_one
+    FileUtils.mv @path_two, @path_one
+    FileUtils.mv "#{@path_two}.rb", @path_one
+    FileUtils.touch "#{@path_one}_#{engine_name}.rb"
     FileUtils.mv "#{@root}/#{engine_name}.gemspec",
-      "#{@root}/#{namespace}_#{engine_name}.gemspec",
-      verbose: true
+      "#{@root}/#{namespace}_#{engine_name}.gemspec"
   end
 
   def file_contents
@@ -85,6 +84,7 @@ class NamespaceEngine
     add_gem_to_gemfile
     config_routes
     write_to(@files)
+    puts success
   end
 
   def file_0
@@ -198,6 +198,15 @@ class NamespaceEngine
         file.write f[:contents]
       end
     end
+  end
+
+  def success
+    success = <<-SUCCESS
+
+      *** NAMESPACING SUCCESSFUL ***
+    SUCCESS
+
+    success
   end
 
 end
