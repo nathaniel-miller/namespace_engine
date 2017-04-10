@@ -9,15 +9,15 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nathaniel Miller"]
   spec.email         = ["nathaniel@m.ller.io"]
 
-  spec.summary       = %q{Quick Summary}
-  spec.description   = %q{Quick Description}
+  spec.summary       = %q{Generate a rails engine with an extra layer of namespacing.}
+  spec.description   = %q{This script runs the rails plugin generator and then changes directory structure and file contents to prevent potential collisions with other engines.}
   spec.homepage      = "http://m.ller.io"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata['allowed_push_host'] = "https://rubygems.org"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = "bin"
-  spec.executables << 'rne'
+  spec.executables = ['namespace_engine']
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.14"
