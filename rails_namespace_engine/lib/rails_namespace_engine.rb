@@ -29,8 +29,18 @@ class NamespaceEngine
 
   def instructions
     insts = <<-INSTS
-      Here are some test instructions!
+      Simply provide two arguments.
+      The first is the name of the namespace you wish to use.
+      The second is the name used for the generated engine.
 
+      Ex. rne my_namespace my_engine.
+
+      This script will run 'rails plugin new engine_name --mountable'.
+      It then uses the provided namespace argument to restructure the file
+      directory and alter the appropriate files.
+
+      The precise nature of these alterations can be viewed in this gems README
+      file or at 'http://m.ller.io/namespacing-for-rails-engines/'.
     INSTS
 
     insts
