@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ["nathaniel@m.ller.io"]
 
   spec.summary       = %q{Generate a rails engine with an extra layer of namespacing.}
-  spec.description   = %q{This script runs the rails plugin generator and then changes directory structure and file contents to prevent potential collisions with other engines.}
-  spec.homepage      = "http://m.ller.io"
+  spec.description   = %q{This script runs the rails plugin generator. It then changes the directory structure and file contents (based on provided namespacing and engine name) to prevent potential collisions with other engines.}
+  spec.homepage      = "https://github.com/nathaniel-miller/namespace_engine/"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

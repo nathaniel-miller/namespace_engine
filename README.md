@@ -7,6 +7,8 @@ This is a script that first generates a new rails plugin. It is the same as runn
 It then procedes to both add to, and restructure the file directory according to the provided namespace argument.
 Lastly, it modifies the necessary files, including the parent app's `Gemfile` and `config/routes.rb` file.
 
+Read more at [http://m.ller.io/namespacing-for-rails-engines/](http://m.ller.io/namespacing-for-rails-engines/)
+
 # Installation
 There are a couple of ways you can do this: The simplest is to install it as a gem either in a Rails' Gemfile:
 ```ruby
