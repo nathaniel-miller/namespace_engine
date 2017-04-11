@@ -29,7 +29,7 @@ Both result in the same thing.
 
 Again, it is important to run the command from the **the top level directory of a rails app** as it references both the
 `Gemfile` and the `config/routes.rb` files. If those are not present, the script will err.
-
+<hr>
 The Second way of using this script would be to clone this repo and run the script directly.
 
 
@@ -37,10 +37,10 @@ Assuming `git` is installed:<br />
 1.) Fork or clone this repo: `git clone https://github.com/nathaniel-miller/namespace_engine` into the **top level of your rails app**.<br />
 2.) From your command line, in the **top level directory** run `rails_namespace_engine/bin/namespace_engine`.<br />
 
-Note: In this script's current state, if you wish to remove the changes it has made:
-1.)Delete the `engines/` directory in the top level of your rails app.
-2.)Remove the bottom two lines in your app's Gemfile.
-3.)Remove the `--mount` line from your rails app's `config/routes.rb` file.
+Note: In this script's current state, if you wish to remove the changes it has made:<br>
+1.)Delete the `engines/` directory in the top level of your rails app.<br>
+2.)Remove the bottom two lines in your app's Gemfile.<br>
+3.)Remove the `--mount` line from your rails app's `config/routes.rb` file.<br>
 
 
 
