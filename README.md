@@ -44,7 +44,7 @@ Note: In this script's current state, if you wish to remove the changes it has m
 
 
 
-## Contributing
+# Contributing
 
 Should you wish to contribute, simply fork this repo, code to your heart's content, and issue a pull request. I will review the changes and, if deemed an improvement, will accept the request.
 
