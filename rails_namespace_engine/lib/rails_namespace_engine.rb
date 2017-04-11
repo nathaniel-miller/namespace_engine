@@ -35,7 +35,7 @@ class NamespaceEngine
       The first is the name of the namespace you wish to use.
       The second is the name used for the generated engine.
 
-      Ex. rne my_namespace my_engine.
+      Ex. namespace_engine my_namespace my_engine
 
       This script will run 'rails plugin new engine_name --mountable'.
       It then uses the provided namespace argument to restructure the file
